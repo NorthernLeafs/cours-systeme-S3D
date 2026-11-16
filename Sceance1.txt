@@ -1,0 +1,76 @@
+Sceance1
+1. le c date de 1972, créé par dennis ritchie aux bell labs. il s’inspire du b (de ken thompson), lui-même issu du bcpl.
+
+2. bcpl -> langage de 1967 (martin richards), sans types, tout est un “mot”. c’est l’ancêtre du b puis du c.
+
+3. oui. k&r (1978), c89/c90 (ansi), c99, c11, c17, c23. la plus récente est c23.
+
+4.c et unix : unix a été réécrit en c en 1973. le c a été fait pour ça.
+c et java : java reprend la syntaxe du c (if, for, {}, etc.) mais avec objets, sans pointeurs, et tourne sur une machine virtuelle.
+
+5. structure :
+#include <stdio.h>      // directives
+
+int global = 0;         // variables globales
+
+int main(void) {        // fonction principale
+    printf("salut\n");
+    return 0;
+}
+
+6. le préprocesseur traite le code avant la compilation. il gère #include (insérer un fichier), #define (remplacer du texte), #ifdef (compilation conditionnelle).
+ex : #define N 10
+
+7. un makefile décrit comment compiler un projet (dépendances + commandes). on lance make.
+prog: main.o
+	gcc main.o -o prog
+main.o: main.c
+	gcc -c main.c
+
+8. char, short, int, long, long long, float, double, long double, _Bool. avec signed / unsigned.
+
+9. une structure regroupe des variables de types différents sous un seul nom.
+struct point { int x; int y; };
+struct point p = {1, 2};
+printf("%d", p.x);
+
+10. un pointeur est une variable qui contient une adresse mémoire.
+int a = 5;
+int *p = &a;   // p contient l'adresse de a
+*p = 7;        // a vaut 7
+
+11. avec sizeof
+sizeof(int)   // souvent 4
+sizeof(a)
+
+12. on lit l’entier octet par octet via un pointeur unsigned char*.
+int n = 258;
+unsigned char *p = (unsigned char*)&n;
+for (int i = 0; i < sizeof(n); i++)
+    printf("%02x ", p[i]);
+
+13. on déréférence l’adresse avec un pointeur unsigned char*.
+unsigned char *p = (unsigned char*)adresse;
+printf("%d", *p);
+
+14. les éléments sont côte à côte en mémoire, dans l’ordre. t[i] est à l’adresse t + i*sizeof(type).
+
+15. stocké ligne par ligne (row-major), tout à la suite. t[i][j] est à la position i*nb_colonnes + j.
+ex : int t[2][3] → t00 t01 t02 t10 t11 t12
+
+16. ça dépend de la machine :
+little endian (x86, arm) : octet de poids faible en premier. 0x1234 → 34 12
+big endian : poids fort en premier. 0x1234 → 12 34
+
+17. une chaîne est un tableau de char fini par '\0'. on utilise <string.h> :
+char s[20] = "salut";
+strlen(s);          // longueur
+strcpy(s, "yo");    // copie
+strcat(s, "!");     // concatène
+strcmp(s, "yo!");   // compare
+
+18. oui, mais le c ne le gère pas vraiment, l’utf8 est stocké comme des octets (1 à 4 par caractère). strlen compte les octets, pas les caractères. ex : “é” = 2 octets.
+
+19. un débogueur permet d’exécuter un programme pas à pas, poser des points d’arrêt et voir les variables.
+c : gdb (gdb ./prog, break main, run, next, print x)
+java : jdb, ou le débogueur d’intellij / eclipse.
