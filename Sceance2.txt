@@ -1,0 +1,73 @@
+Sceance2
+
+1. de bas en haut (adresses croissantes) :
+text : le code machine
+data : variables globales initialisées
+bss : variables globales non initialisées (à 0)
+heap (tas) : allocation dynamique, grandit vers le haut
+stack (pile) : variables locales, grandit vers le bas
+
+2. oui, le code compilé (pas le source) est en mémoire dans la zone text. elle est en lecture seule.
+
+3. oui.
+globales/statiques : data ou bss
+locales : pile
+allouées avec malloc : tas
+
+4. non. elles disparaissent à la fin du programme. les locales disparaissent même à la fin de leur fonction. pour du permanent, il faut écrire dans un fichier.
+
+5. oui : la pile (locales, vit le temps de la fonction) et le tas (vit jusqu’au free ou la fin du programme).
+
+6. à chaque appel, un “cadre” est empilé sur la pile avec les paramètres et les variables locales. au return, le cadre est dépilé et tout est perdu.
+
+7. taille connue à l’écriture :
+void f(void) {
+    int t[10];          // sur la pile
+    int u[3] = {1,2,3};
+}
+
+8. avec malloc:
+int n = 5;
+int *t = malloc(n * sizeof(int));
+
+9. la taille et l’emplacement sont fixés à la compilation. ex : variables globales, static, tableaux de taille fixe.
+
+10. la mémoire est demandée pendant l’exécution, avec malloc, calloc, realloc. on la rend avec free.
+
+11. le tas (heap).
+
+12. entre bss et pile, juste au-dessus des données du programme. elle grandit vers les adresses hautes, la pile vers le bas.
+
+13. statique : fixée à la compilation (connue du compilateur). pile : limitée, souvent 8 mo sous linux (ulimit -s). tas : pas de taille fixe, limité par la ram + swap disponible.
+
+14. malloc(nb_octets) renvoie un pointeur vers la zone, ou NULL si échec.
+int *p = malloc(10 * sizeof(int));
+if (p == NULL) { /* erreur */ }
+
+15. free(p) rend la mémoire. à faire une seule fois par malloc.
+free(p);
+p = NULL;   // bonne habitude
+
+16. avec le pointeur, comme un tableau :
+p[0] = 3;
+*(p + 1) = 4;
+
+17. dépend de la machine et de l’os. en pratique plusieurs go. si c’est trop, malloc renvoie NULL.
+
+18. oui, on peut allouer l’espace d’une variable, mais elle n’a pas de nom : on y accède par le pointeur.
+int *x = malloc(sizeof(int));
+*x = 5;
+
+19. un pointeur contient une adresse. oui, on peut faire :
+p + n, p - n : déplacer
+p1 - p2 : nb d’éléments entre deux pointeurs
+comparer (==, <, ...)
+pas de + entre deux pointeurs, ni de * ou /.
+
+20. p+1 = adresse de p + sizeof(*p) (pas +1 octet).
+ex : int *p à l’adresse 100 → p+1 vaut 104.
+&x : adresse de x
+*p : valeur pointée par p
+int a = 5;
+int *p = &a;
+printf("%d", *p);   // 5
